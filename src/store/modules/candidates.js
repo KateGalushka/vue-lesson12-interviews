@@ -36,8 +36,9 @@ export default {
 		onFilterCandidatesByPosition({commit}, position){
 			commit('filterCandidatesByPosition', position)
 		},
-		onDeleteCandidate({ commit }, candidateId){
-			commit('deleteCandidate', candidateId)
+		onDeleteCandidate({ commit, dispatch }, candidateId){
+			commit('deleteCandidate', candidateId);
+			dispatch('interviews/deleteInterviewByCandidateId', candidateId, {root:true})
 		},
 		onAddCandidate({ commit }, candidateData){
 			commit('addCandidate', candidateData)

@@ -33,6 +33,12 @@ export default {
 		deleteInterview(state, interviewId){
 			state.interviewsList = state.interviewsList.filter(interview=>interview.id !== interviewId)
 		},
+		deleteInterviewByWorkerId(state, workerId){
+			state.interviewsList = state.interviewsList.filter(interview=>interview.workerId !==workerId)
+		},
+		deleteInterviewByCandidateId(state, candidateId){
+			state.interviewsList = state.interviewsList.filter(interview => interview.candidateId !== candidateId)
+		},
 		
 	},
 	actions: {
@@ -41,11 +47,16 @@ export default {
 				id: new Date().getTime(),
 				...interviewData
 			});
-			// dispatch('candidates/onDeleteCandidate', interviewData.candidateId, { root:true });
 		},
 		onDeleteInterview({ commit }, interviewId){
 			commit('deleteInterview', interviewId)
 		},
+		deleteInterviewByWorkerId({ commit }, workerId){
+			commit('deleteInterviewByWorkerId', workerId)
+		},
+		deleteInterviewByCandidateId({ commit }, candidateId){
+			commit('deleteInterviewByCandidateId', candidateId)
+		}
 	
 	},
 	modules: {},

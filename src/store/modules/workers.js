@@ -36,8 +36,9 @@ export default {
 		onFilterWorkersByPosition({ commit }, position) {
 			commit('filterWorkersByPosition', position)
 		},
-		onDeleteWorker({ commit }, workerId){
-			commit('deleteWorker', workerId)
+		onDeleteWorker({ commit, dispatch }, workerId){
+			commit('deleteWorker', workerId);
+			dispatch('interviews/deleteInterviewByWorkerId', workerId, {root:true});
 		},
 		onAddWorker({ commit }, workerData) {
 			commit('addWorker', workerData)
