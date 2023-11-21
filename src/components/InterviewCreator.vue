@@ -3,7 +3,7 @@
 		<div class="selector-container__item">
 			<label>Працівник</label>
 			<select v-model="interviewData.workerId">
-				<option v-for="worker in getWorkersList" :key="worker.id" :value="worker.id">
+				<option v-for="worker in workersListToSelect" :key="worker.id" :value="worker.id">
 					{{ worker.name }} - {{ worker.position }}
 				</option>
 			</select>
@@ -45,13 +45,14 @@ import { days } from '../data/days'
 				days: days,
 				interviewData:{},
 				candidatesListToSelect: [],
+				workersListToSelect: [],
 				message: ''
 			}
 		},
 
 		computed: {
-			...mapGetters('workers', ['getWorkersList', 'getWorkerById']),
-			...mapGetters('candidates', ['getCandidatesList', 'getFilteredCandidatesList']),
+			...mapGetters('workers', ['getWorkersList', 'getWorkerById', 'getFilteredWorkersList']),
+			...mapGetters('candidates', ['getCandidatesList', 'getCandidateById', 'getFilteredCandidatesList']),
 
 			isMessage(){
 				return ( this.interviewData.workerId && !this.getFilteredCandidatesList.length)
@@ -60,25 +61,36 @@ import { days } from '../data/days'
 
 		watch: {
 			'interviewData.workerId'(newVal) {
-				if (newVal){
+				if (!this.interviewData.candidateId && newVal){
 					let selectedPosition = this.getWorkerById(newVal).position;
 					this.onFilterCandidatesByPosition(selectedPosition);
 					this.candidatesListToSelect = this.getFilteredCandidatesList
 				}
 			},
+			'interviewData.candidateId'(newVal){
+				if (!this.interviewData.workerId && newVal){
+					let selectedPosition = this.getCandidateById(newVal).position;
+					this.onFilterWorkersByPosition(selectedPosition);
+					this.workersListToSelect = this.getFilteredWorkersList;
+
+				}
+			}
 		},
 		created () {
 			this.candidatesListToSelect = this.getCandidatesList;
+			this.workersListToSelect = this.getWorkersList;
 		},
 		methods: {
 			...mapActions('interviews', ['onAddInterview']),
 			...mapActions('candidates', ['onFilterCandidatesByPosition']),
+			...mapActions('workers', ['onFilterWorkersByPosition']),
 
 			onAdd(interviewData){
 				if (this.interviewData.workerId && this.interviewData.candidateId && this.interviewData.day){
 					this.onAddInterview(interviewData);
 					this.interviewData = {};
 					this.candidatesListToSelect = this.getCandidatesList;
+					this.workersListToSelect = this.getWorkersList;
 					this.message = '';
 				} else {
 					this.message = 'Оберіть всі дані (працівник, кандидат, день)'

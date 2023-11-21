@@ -13,7 +13,7 @@ export default {
 		
 	},
 	mutations: {
-		filterCandidateByPosition(state, position){
+		filterCandidatesByPosition(state, position){
 			if (position){
 				state.filteredCandidatesList = [...state.candidatesList.filter(candidate => candidate.position.toLowerCase().includes(position.toLowerCase()))]
 			} else {
@@ -34,7 +34,7 @@ export default {
 	},
 	actions: {
 		onFilterCandidatesByPosition({commit}, position){
-			commit('filterCandidateByPosition', position)
+			commit('filterCandidatesByPosition', position)
 		},
 		onDeleteCandidate({ commit }, candidateId){
 			commit('deleteCandidate', candidateId)
